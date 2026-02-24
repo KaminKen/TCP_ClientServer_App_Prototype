@@ -114,7 +114,5 @@ namespace TCP_ServerClient_App
             }
             
         }
-
-    
     }
 }
