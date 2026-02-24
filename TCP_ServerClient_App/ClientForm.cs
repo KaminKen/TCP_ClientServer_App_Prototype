@@ -118,7 +118,7 @@ namespace TCP_ServerClient_App
 
         private void ClearLogButton_Click(object sender, EventArgs e)
         {
-
+            LogTextBox.Clear();
         }
     }
 }
