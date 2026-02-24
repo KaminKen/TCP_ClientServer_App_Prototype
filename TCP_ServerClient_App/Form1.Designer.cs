@@ -35,6 +35,8 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnStartServer = new System.Windows.Forms.Button();
             this.ServerLabel = new System.Windows.Forms.Label();
+            this.OpenClientButton = new System.Windows.Forms.Button();
+            this.CloseClientButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtLogLabel
@@ -103,11 +105,34 @@
             this.ServerLabel.Text = "Server";
             this.ServerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // OpenClientButton
+            // 
+            this.OpenClientButton.Location = new System.Drawing.Point(234, 426);
+            this.OpenClientButton.Name = "OpenClientButton";
+            this.OpenClientButton.Size = new System.Drawing.Size(181, 52);
+            this.OpenClientButton.TabIndex = 13;
+            this.OpenClientButton.Text = "Open Client";
+            this.OpenClientButton.UseVisualStyleBackColor = true;
+            this.OpenClientButton.Click += new System.EventHandler(this.OpenClientButton_Click);
+            // 
+            // CloseClientButton
+            // 
+            this.CloseClientButton.Enabled = false;
+            this.CloseClientButton.Location = new System.Drawing.Point(421, 426);
+            this.CloseClientButton.Name = "CloseClientButton";
+            this.CloseClientButton.Size = new System.Drawing.Size(181, 52);
+            this.CloseClientButton.TabIndex = 14;
+            this.CloseClientButton.Text = "Close Client";
+            this.CloseClientButton.UseVisualStyleBackColor = true;
+            this.CloseClientButton.Click += new System.EventHandler(this.CloseClientButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 554);
+            this.Controls.Add(this.CloseClientButton);
+            this.Controls.Add(this.OpenClientButton);
             this.Controls.Add(this.ServerLabel);
             this.Controls.Add(this.txtLogLabel);
             this.Controls.Add(this.txtPortLabel);
@@ -132,6 +157,8 @@
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Label ServerLabel;
+        private System.Windows.Forms.Button OpenClientButton;
+        private System.Windows.Forms.Button CloseClientButton;
     }
 }
 

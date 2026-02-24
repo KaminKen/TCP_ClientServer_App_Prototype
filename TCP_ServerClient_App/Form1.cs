@@ -20,6 +20,7 @@ namespace TCP_ServerClient_App
     {
 
         TcpListener server; //represent bind and listen socket in one class, which is more convenient to use but less flexible than using Socket class directly, but for this simple server, it's enough
+        ClientForm clientForm = new ClientForm();
         public Form1()
         {
             InitializeComponent();
@@ -113,6 +114,30 @@ namespace TCP_ServerClient_App
                 txtLog.AppendText("Error during stop: " + ex.Message + Environment.NewLine);
             }
             
+        }
+
+        private void OpenClientButton_Click(object sender, EventArgs e)
+        {
+            //ClientForm clientForm = new ClientForm(); //defined at class level to make it accessible in both open and close button click event handlers, and to prevent multiple instances of ClientForm from being created when the open button is clicked multiple times.
+            if (clientForm == null || clientForm.IsDisposed) 
+            {
+                clientForm = new ClientForm(); //create a new instance of ClientForm if it doesn't exist or has been disposed
+                clientForm.Show();
+            }
+
+            OpenClientButton.Enabled = false; // Disable the button to prevent multiple client forms from being opened
+            CloseClientButton.Enabled = true; // Enable the close button to allow closing the client form
+        }
+
+        private void CloseClientButton_Click(object sender, EventArgs e)
+        {
+            if (clientForm != null && !clientForm.IsDisposed) 
+            {
+                clientForm.Close();
+                clientForm = null;
+            }
+            OpenClientButton.Enabled = true;
+            CloseClientButton.Enabled = false;
         }
     }
 }
