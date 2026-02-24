@@ -21,6 +21,7 @@ namespace TCP_ServerClient_App
 
         TcpListener server; //represent bind and listen socket in one class, which is more convenient to use but less flexible than using Socket class directly, but for this simple server, it's enough
         ClientForm clientForm = new ClientForm();
+        private bool isRunning = false;
         public Form1()
         {
             InitializeComponent();
@@ -53,6 +54,7 @@ namespace TCP_ServerClient_App
                 btnStartServer.Enabled = false;
                 btnStopServer.Enabled = true;
 
+                isRunning = true;
                 Task.Run(() => ListenForClient());  //start a new thread to listen for client connections, so that the UI thread is not blocked and can still respond to user interactions. Or meaning it works in the background, allowing the main thread to remain responsive.
             }
             catch (Exception ex)
@@ -69,7 +71,7 @@ namespace TCP_ServerClient_App
         {
             try
             {
-                while (true)
+                while (isRunning)
                 {
                     TcpClient client = server.AcceptTcpClient(); //This method blocks until there is connection and returns a TcpClient object that represents the connection to the client. It allows us to read from and write to the client.
                     this.Invoke((MethodInvoker)delegate
@@ -79,20 +81,36 @@ namespace TCP_ServerClient_App
 
                     NetworkStream stream = client.GetStream(); 
                     byte[] buffer = new byte[1024]; // Using [] to tell C# that this is an array, not a single byte
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
-                    string receivedMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    this.Invoke((MethodInvoker)delegate
+                    while (true) 
                     {
-                        txtLog.AppendText("Received Message: " + receivedMessage + Environment.NewLine);
-                    });
+                        int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+                        if(bytesRead == 0)
+                        {
+                            break; //client disconnected, exit the loop and close the connection
+                            //on client side, empty or blank space is guraded.
+                        }
+
+                        string receivedMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            txtLog.AppendText("Received Message: " + receivedMessage + Environment.NewLine);
+                        });
+                    }
 
                     client.Close();
                 }
             }
-            catch
-            { 
-                //if stop, finished automatically
+            catch (Exception ex)
+            {
+                if (isRunning)
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        txtLog.AppendText("Server error: " + ex.Message + Environment.NewLine);
+                    });
+                }
             }
         }
 
@@ -102,6 +120,7 @@ namespace TCP_ServerClient_App
             {
                 if (server != null)
                 {
+                    isRunning = false;
                     server.Stop();
                     server = null;
                     txtLog.AppendText("Server stopped." + Environment.NewLine);
