@@ -57,30 +57,36 @@ namespace TCP_ServerClient_App
             }
         }
 
-        private void DisconnectButton_Click(object sender, EventArgs e)
+        private void Disconnect()
         {
-            try 
+            try
             {
-                if (client != null) 
+                if (stream != null)
                 {
-                    if (stream != null) 
-                    {
-                        stream.Close(); //close the network channel to free resources
-                    }
+                    stream.Close(); //close the network channel to free resources
                     stream = null;
+                }
+                if (client != null)
+                {
+
                     client.Close(); //close the client connection
                     client = null;
-
-                    ConnectButton.Enabled = true;
-                    DisconnectButton.Enabled = false;
-                    SendButton.Enabled = false;
-                    LogTextBox.AppendText("Disconnected from server." + Environment.NewLine); //update the log to tell user that it is disconnected
-
                 }
-            } 
-            catch 
+
+                LogTextBox.AppendText("Disconnected from server." + Environment.NewLine); //update the log to tell user that it is disconnected
+                ConnectButton.Enabled = true;
+                DisconnectButton.Enabled = false;
+                SendButton.Enabled = false;
+
+            }
+            catch
             {
             }
+        }
+
+        private void DisconnectButton_Click(object sender, EventArgs e)
+        {
+            Disconnect();
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -112,13 +118,18 @@ namespace TCP_ServerClient_App
             }
             catch (Exception ex) 
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message); 
             }   
         }
 
         private void ClearLogButton_Click(object sender, EventArgs e)
         {
-            LogTextBox.Clear();
+            LogTextBox.Clear(); 
+        }
+
+        private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Disconnect(); //ensure that the client disconnects from the server when the form is closing.
         }
     }
 }

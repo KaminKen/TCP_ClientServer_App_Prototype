@@ -174,6 +174,7 @@
             this.Controls.Add(this.ServerIpLabel);
             this.Name = "ClientForm";
             this.Text = "ClientForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClientForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
